@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use App\Service\UtilsService;
-
 /**
  * Class Controller
  *
@@ -36,5 +34,4 @@ abstract class Controller implements ControllerInterface
 
         include $content;
     }
-
 }
