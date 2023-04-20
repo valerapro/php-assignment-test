@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Traits\TraitValidateRequest;
 use SocialPost\Service\SocialPostService;
 use Statistics\Builder\ParamsBuilder;
 use Statistics\Enum\StatsEnum;
@@ -15,6 +16,7 @@ use Statistics\Service\StatisticsService;
  */
 class StatisticsController extends Controller
 {
+    use TraitValidateRequest;
 
     private const STAT_LABELS = [
         StatsEnum::TOTAL_POSTS_PER_WEEK                    => 'Total posts split by week',
