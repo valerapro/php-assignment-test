@@ -26,15 +26,30 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 <script>
+    const errorMessage = {
+        periodNotValid : "Period dates is not valid",
+        longTimeResponse : "Some issue with API side. Please try later."
+    };
+
     $(document).ready(function () {
         $('#retrieve-stats').click(function () {
-            $.get('/statistics?start_date=' + $('#start_date').val() + '&end_date=' + $('#end_date').val(),
-                function (data, status) {
-                    $('#statistics').addClass('visible').removeClass('invisible');
-                    $('#stats-table').empty();
-                    onStatsSuccess(data.stats);
-                }
-            );
+            if(isPeriodValid($('#start_date').val(), $('#end_date').val())) {
+                $.get('/statistics?start_date=' + $('#start_date').val() + '&end_date=' + $('#end_date').val(),
+                    function (data, status) {
+                            $('#statistics').addClass('visible').removeClass('invisible');
+                        $('#stats-table').empty();
+                        onStatsSuccess(data.stats);
+                    }
+                );
+            }
+        })
+
+        $('#start_date').change(function () {
+            isPeriodValid($('#start_date').val(), $('#end_date').val())
+        })
+
+        $('#end_date').change(function () {
+            isPeriodValid($('#start_date').val(), $('#end_date').val())
         })
     });
 
@@ -73,6 +88,16 @@
                 appendRow(item, false);
             }
         );
+    }
+
+    function isPeriodValid(start, end) {
+        if (start > end) {
+            $('#error-form').html(errorMessage.periodNotValid).removeClass('invisible');
+            return false;
+        }
+
+        $('#error-form').html('').addClass('invisible');
+        return true;
     }
 </script>
 </body>

@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use DateTime;
 use SocialPost\Service\SocialPostService;
 use Statistics\Builder\ParamsBuilder;
 use Statistics\Enum\StatsEnum;
@@ -62,8 +61,7 @@ class StatisticsController extends Controller
     public function indexAction(array $params)
     {
         try {
-            $startDate = $this->extractDate($params['start_date'] ?? null);
-            $endDate   = $this->extractDate($params['end_date'] ?? null);
+            list($startDate, $endDate) = $this->validateRequestIndexAction($params);
             $params    = ParamsBuilder::reportStatsParams($startDate, $endDate);
 
             $posts = $this->socialService->fetchPosts();
@@ -73,27 +71,11 @@ class StatisticsController extends Controller
                 'stats' => $this->extractor->extract($stats, self::STAT_LABELS),
             ];
         } catch (\Throwable $throwable) {
-            http_response_code(500);
-
-            $response = ['message' => 'An error occurred'];
+            http_response_code($throwable->getCode() ?? 500);
+            $response = ['message' => $throwable->getMessage() ?? 'An error occurred'];
         }
 
         $this->render($response, 'json', false);
     }
 
-    /**
-     * @param ?string $date
-     *
-     * @return DateTime
-     */
-    private function extractDate(?string $date): DateTime
-    {
-        $dateTime = DateTime::createFromFormat('F, Y', $date);
-
-        if (false === $dateTime) {
-            $dateTime = new DateTime();
-        }
-
-        return $dateTime;
-    }
 }
