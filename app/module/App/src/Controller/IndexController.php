@@ -15,7 +15,8 @@ class IndexController extends Controller
         $options = [];
         $date    = new \DateTime();
         for ($month = 0; $month < 6; $month++) {
-            $options[] = $date->format('F, Y');
+            $options[$month]['option'] = $date->format('F, Y');
+            $options[$month]['value'] = $date->getTimestamp();
             $date->modify('-1 month');
         }
 

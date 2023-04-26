@@ -11,7 +11,7 @@
                 <select class="custom-select d-block w-100" id="start_date" required="">
                     <?php foreach ($options as $option): ?>
 
-                        <option> <?= $option ?></option>
+                        <option value="<?= $option['value'] ?>"> <?= $option['option'] ?></option>
 
                     <?php endforeach; ?>
                 </select>
@@ -19,11 +19,12 @@
                 <select class="custom-select d-block w-100" id="end_date" required="">
                     <?php foreach ($options as $option): ?>
 
-                        <option> <?= $option ?></option>
+                        <option value="<?= $option['value'] ?>"> <?= $option['option'] ?></option>
 
                     <?php endforeach; ?>
                 </select>
                 <input class="btn btn-primary btn-block" id="retrieve-stats" value="Show statistics" type="button">
+                <div id="error-form" class="text-danger invisible"></div>
             </div>
         </div>
     </form>
